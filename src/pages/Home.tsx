@@ -23,7 +23,7 @@ export function Home() {
           ))}
         </div>
         <h1 className="home-title">JESSIE</h1>
-        <p className="home-tagline">Predictive Learning for Jessup</p>
+        <p className="home-tagline">Predictive Learning for Jessup University</p>
         <p className="home-sub">Canvas tells you what happened. Jessie helps you understand what happens next.</p>
 
         <div className="portal-grid">
