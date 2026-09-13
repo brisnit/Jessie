@@ -9,6 +9,7 @@ import { Link } from '../lib/router';
 import { useApp } from '../state/AppState';
 import { Assistant } from './Assistant';
 import { ChatPanel } from './Chat';
+import { ErrorBoundary } from './ErrorBoundary';
 import { ReviewModal } from './ReviewModal';
 import { Avatar, CanvasSync, Wordmark } from './ui';
 
@@ -19,12 +20,26 @@ export function Shell({ role, path, ctx, children }: { role: Role; path: string;
       <Sidebar role={role} path={path} />
       <div className="main-col">
         <Topbar role={role} />
-        <main className="main">{children}</main>
+        <main className="main">
+          <ErrorBoundary resetKey={path} fallback={<ViewUnavailable role={role} />}>{children}</ErrorBoundary>
+        </main>
       </div>
-      <ChatPanel />
-      <Assistant role={role} ctx={ctx} />
-      <ReviewModal />
+      <ErrorBoundary resetKey={path} fallback={null}>
+        <ChatPanel />
+        <Assistant role={role} ctx={ctx} />
+        <ReviewModal />
+      </ErrorBoundary>
       <Toasts />
+    </div>
+  );
+}
+
+export function ViewUnavailable({ role }: { role: Role }) {
+  return (
+    <div className="page empty-page">
+      <h1>This view could not be loaded</h1>
+      <p className="muted">Something about this page didn't resolve. Your dashboard is still available.</p>
+      <Link to={`/${role}`} className="btn btn-dark">Back to Dashboard</Link>
     </div>
   );
 }

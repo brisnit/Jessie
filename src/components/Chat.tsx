@@ -25,9 +25,17 @@ export function Conversation({ threadId, role, draft }: { threadId: string; role
   const endRef = useRef<HTMLDivElement>(null);
   const count = thread?.messages.length ?? 0;
 
-  useEffect(() => setText(draft ?? ''), [threadId, draft]);
-  useEffect(() => markRead(threadId, role), [threadId, role, count, markRead]);
-  useEffect(() => endRef.current?.scrollIntoView({ block: 'end' }), [count, typing[threadId], threadId]);
+  // Effects use block bodies on purpose: an implicit return becomes the cleanup function,
+  // and Chrome's scrollIntoView now returns a Promise, which React then tries to call on unmount.
+  useEffect(() => {
+    setText(draft ?? '');
+  }, [threadId, draft]);
+  useEffect(() => {
+    markRead(threadId, role);
+  }, [threadId, role, count, markRead]);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ block: 'end' });
+  }, [count, typing[threadId], threadId]);
 
   if (!thread) return null;
   const other = counterpart(thread, role);

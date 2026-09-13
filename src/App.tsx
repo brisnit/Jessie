@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { Shell } from './components/Shell';
+import { Shell, ViewUnavailable } from './components/Shell';
 import { getCourse, getEnrollment } from './data/insights';
 import { DEMO_PROFESSOR, DEMO_STUDENT } from './data/mock';
 import type { Role } from './data/types';
 import type { AssistantContext } from './lib/assistant';
-import { Link, useRoute } from './lib/router';
+import { useRoute } from './lib/router';
 import { Home } from './pages/Home';
 import { MessagesPage } from './pages/MessagesPage';
 import { CourseView } from './pages/professor/CourseView';
@@ -16,15 +16,7 @@ import { StudentCourse } from './pages/student/StudentCourse';
 import { StudentDashboard } from './pages/student/StudentDashboard';
 import { AppStateProvider } from './state/AppState';
 
-function NotFound({ role }: { role: Role }) {
-  return (
-    <div className="page empty-page">
-      <h1>Nothing here yet</h1>
-      <p className="muted">That page isn't part of the prototype.</p>
-      <Link to={`/${role}`} className="btn btn-dark">Back to dashboard</Link>
-    </div>
-  );
-}
+const NotFound = ViewUnavailable;
 
 function resolve(path: string): { role: Role; page: ReactNode; ctx: AssistantContext } | null {
   const [area, section, id, sub, subId] = path.split('/').filter(Boolean);
